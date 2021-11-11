@@ -15,12 +15,21 @@ class Tetromino{
         this.elements.set(1,1,0);
         this.elements.set(1,1,1);
         this.elements.set(1,2,1);
+
+        this.pos = {
+            x:10,
+            y:2
+        };        //spostamento pos:position
+
+        this.color= "red";
     }
 
     draw(ctx){  //disegno il tetromino
+        
+        ctx.fillStyle = this.color;  //creazione poligono rosso
         this.elements.forEach((v, x, y) => {
             if(v !== 0){
-                ctx.fillRect(x, y, 1, 1);
+                ctx.fillRect(x+this.pos.x, y+this.pos.y, 1, 1); //spostamento
             } 
         });
     }     
@@ -31,37 +40,34 @@ t.draw(ctx);
 
 ctx.scale(SCALE_F,SCALE_F); //fattore di scala
 
-for(let i=0; i < screen.width / SCALE_F; i++){
-    ctx.fillStyle = i % 2 === 0 ?  COLOR1: COLOR2;  //colore sfondo a righe
-    ctx.fillRect(i,0, SCALE_F, screen.height/SCALE_F);
-    console.log(i);
+function drawGameBackground(){
+    for(let i=0; i < screen.width / SCALE_F; i++){
+        ctx.fillStyle = i % 2 === 0 ?  COLOR1: COLOR2;  //colore sfondo a righe
+        ctx.fillRect(i,0, SCALE_F, screen.height/SCALE_F);
+        console.log(i);
+    }
 }
 
-ctx.fillStyle = "green";    //crazione quadrato verde
-ctx.fillRect(5,5,1,1);
-
-/*
-function forEachElement(el, cb){    //call Back
-        el.forEach((row,y)=>{
-            row.forEach((v,x)=>{
-                cb(v,x,y);
-            });
-        });
+window.addEventListener("keyup", (event) => {   //alla pressione del tasto
+    console.log("UP", event.key);
+});
+window.addEventListener("keydown", (event) => {
+    console.log("DOWN", event.key);
+    const {key} = event;
+    if(key=== "ArrowLeft"){
+        t.pos.x--; 
+    }else if(key === "ArrowRight") {
+        t.pos.x++;
     }
+    console.table(t.pos);
+});
 
 
-function drawElement2(el){  //funzione che itera gli elementi
-    forEachElement(el,
-        (v,x,y)=>{
-            if(v !== 0){
-           ctx.fillRect(x,y, 1, 1);
-            }
-        });
-};
+function update( time=0){//ricorsiva, loop per aggiornare la finestra 
+    drawGameBackground();
+    t.draw(ctx);
+    requestAnimationFrame(update);
+}
 
-drawElement2(elements);  
+update();//aggiorna la finestra
 
-*/
-
-ctx.fillStyle = "red";  //creazione poligono rosso
-t.draw(ctx);
