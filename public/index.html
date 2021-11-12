@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="style.css" rel="stylesheet" type="text/css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">   
     <title>Document</title>
 </head>
 <body>
 
-    <canvas id="screen" width="240" height="400"></canvas>
+<div class="container">
+    <div class="intestazione">
+        <h1 class="title">TETRIS - by Lurby</h1>
+    </div>
+    <div class="game-container">
+        <canvas id="screen" width="240" height="400"></canvas>        
+    </div>
+    <div class="punteggio">
+        <h4 class="">Punteggio:</h4>
+    </div>
+</div>
+
     <script src="tetris.js" type="module"></script>
-    
 </body>
 </html>

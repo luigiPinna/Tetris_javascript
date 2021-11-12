@@ -8,7 +8,7 @@ const screen = document.getElementById("screen");
 const ctx = screen.getContext("2d");
 
 const COLOR1 = "#26224b";   //definizione colori
-const COLOR2 = "#1e1a3f";
+const COLOR2 = "#26224b";
 
 
 

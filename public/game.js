@@ -1,7 +1,7 @@
 import Tetramino from './tetramino.js';
 
-function randomIntFromInterval(max){
-    return Math.floor(Math.random()*max);
+function randomIntFromInterval(min,max){
+    return Math.floor(Math.random()*(max-min+1)+min);
 }
 export default class tetrisGame{
     constructor(){
@@ -12,23 +12,24 @@ export default class tetrisGame{
         this.currentTetramino = null;
         this.board = null;
         this.configs = [
+            [],
             [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:2,y:1},],
             [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}, {x:3,y:0},],
             [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}, {x:1,y:2},],
             [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:1,y:1},]
         ];
-        this.colors = ["red", "white", "magenta", "yellow"];
+        this.colors = ["","#2f8ee0", "#1eaa2b", "#f71a20", "#c3bf27"];
         this.nextTetraminoConfig();
     }
 
     getNextTetramino(){
         this.nextTetraminoConfig();
-        this.currentTetramino = new Tetramino(this.configs[this.nextTetramino]);      
+        this.currentTetramino = new Tetramino(this.configs[this.nextTetramino],this.nextTetramino);      
         this.currentTetramino.color = this.colors[this.nextTetramino];  
         return this.currentTetramino;
     }
 
     nextTetraminoConfig(){
-        this.nextTetramino =  randomIntFromInterval(this.configs.length-1);
+        this.nextTetramino =  randomIntFromInterval(1,this.configs.length-1);
     }
 }

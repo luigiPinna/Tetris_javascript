@@ -1,7 +1,5 @@
 import Matrix from './matrix.js';
 
-const COLORS = ["", "red", "green"];
-
 export default class Board{
     constructor(game,w, h){
         
@@ -53,7 +51,7 @@ export default class Board{
     draw(ctx){            
         this.elements.forEach((v, x, y) => {    //per tutti gli elementi
             if(v !== 0){
-                ctx.fillStyle = COLORS[v];  //creazione poligono rosso
+                ctx.fillStyle = this.game.colors[v];  //creazione poligono rosso
                 ctx.fillRect(x, y, 1, 1); //spostamento
             } 
         });

@@ -1,11 +1,11 @@
 import Matrix from './matrix.js';
 
 export default class Tetramino{
-    constructor(config){
+    constructor(config,v){
         this.elements = new Matrix(4,4);        //matrice 4x4 
       
         config.forEach(({x,y}) =>{
-            this.elements.set(1,x,y);
+            this.elements.set(v,x,y);
         });
         this.pos = {  //posizione degli assi -> pos:position
             x:5,
