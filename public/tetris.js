@@ -1,6 +1,6 @@
-import Matrix from './matrix.js';
 import Board from './board.js';
-import Tetromino from './tetromino.js';
+import Tetramino from './tetramino.js';
+import TetrisGame from './game.js';
 
 console.log('TETRIS.JS LOADER');
 
@@ -9,12 +9,14 @@ const ctx = screen.getContext("2d");
 
 const COLOR1 = "#26224b";   //definizione colori
 const COLOR2 = "#1e1a3f";
+
+
+
 const SCALE_F = 20; //fattore di scala costante
+let game = new TetrisGame();
+let board = new Board(game, screen.width/SCALE_F, screen.height/SCALE_F);
 
-let board = new Board(screen.width/SCALE_F, screen.height/SCALE_F);
-
-let t = new Tetromino();
-
+let t = game.getNextTetramino();
 
 ctx.scale(SCALE_F,SCALE_F); //fattore di scala
 
@@ -25,50 +27,72 @@ function drawGameBackground(){
         ctx.fillRect(i,0, SCALE_F, screen.height/SCALE_F);       
     }
 }
+function resetTetramino(){
+    t = game.getNextTetramino();
+    t.pos.y = 0;
+    board.deleteRows();
+}
 
 window.addEventListener("keyup", (event) => {   //alla pressione del tasto
     console.log("UP", event.key);
 });
 
+//Tutti gli eventi mandati dall'utente alla pressione dei tasti
 window.addEventListener("keydown", (event) => {
-    const {key} = event;
-    let direction =0;
-    if(key === "ArrowLeft"){
+    const {key, keyCode} = event;    
+ 
+    let direction = 0;
+    if(key === "ArrowLeft"){            //al premere del tasto sinistra
         direction = -1;
  
-    }else if(key === "ArrowRight") {
+    }else if(key === "ArrowRight") {    //al premere del tasto destra
         direction = 1;
     }
     t.pos.x += direction; 
 
     if(t.collideBorders(screen.width / SCALE_F) && direction !==0){
-     console.log("COLLIDE!");
-     t.pos.x -= direction;
+        t.pos.x -= direction;
+    } else if (board.elementCollide(t) && direction !==0){//t= tetromino
+        t.pos.x -= direction;
     }   
-   
-    console.table(t.pos);
+    if(key === "ArrowDown"){    //al premere del tasto giu'
+        dropTetromino();
+    }  
+
+    if(keyCode === 32){ //al premere dello 'spazio'
+        t.rotate();     //comando per ruotare
+        if (t.collideBorders(screen.width / SCALE_F)) t.adjustAfterRotate(screen.width / SCALE_F); //cicllo infinito        
+        if(board.collide(t)){
+            t.pos.y--;
+            board.merge(t);
+           resetTetramino();    //ritorno sopra e aggiorna il tetramino casuale
+        }
+    }
 });
 
 let lastTime=0;
 let dropInterval = 500;
 let lastDropDelta = 0;
 
-function dropUpdate(delta){
-    if(lastDropDelta > dropInterval){
-        t.pos.y++;
-        lastDropDelta =0;
+function dropTetromino(){       
+    t.pos.y++;
+    if(board.collide(t)){
+        t.pos.y--;
+        board.merge(t);       
+        resetTetramino();
     }
-    if(t.collideBottom(screen.height / SCALE_F)){
-        console.log("COLLIDE!");
-        t.pos.y = 0;
-    }
+    lastDropDelta=0;
 }
+
 //aggiorna costantemente la pagina
 function update(time=0){        //ricorsiva, loop per aggiornare la finestra 
     let delta = time - lastTime;
-    lastDropDelta +=delta;
-    dropUpdate();
+    lastDropDelta +=delta;    
+    if(lastDropDelta > dropInterval){       
+        dropTetromino();
+    }   
     drawGameBackground();
+    board.draw(ctx); 
     t.draw(ctx);
     lastTime = time;
     requestAnimationFrame(update);
