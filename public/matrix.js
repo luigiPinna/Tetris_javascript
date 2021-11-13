@@ -1,10 +1,11 @@
 export default class Matrix{
     constructor(width, height){
-        this.elements = [];
+        this.score=0;
+        this.elements = [];       
         while(height-- > 0){
             this.elements.push(new Array(width).fill(0));            
-        }
-    }
+        }      
+    }    
 
     transpose() {    //ruotare il tetromino, ruota la matrice
         for(let i=0; i<4; i++){
@@ -32,12 +33,16 @@ export default class Matrix{
         });        
     }
 //aggiorna la riga in basso se viene riempita e la elimina
-    updateRows(){
-        let toDelete = [];
+    updateRows(){        
+        let toDelete = [];       
         const len = this.elements.length;
         this.elements.forEach((row, i) => {
             if(row.every((v) => v !==0)){
                 toDelete.push(i);
+              
+            this.score=this.score+10;   //Aggiornamento del punteggio
+            console.log("STAMPA SCORE");
+            document.getElementById("score").innerHTML = this.score;  
             }            
         });
         toDelete.forEach(idx => {
@@ -46,10 +51,15 @@ export default class Matrix{
         for(let k = 0; k < toDelete.length; k++){
             this.elements.unshift(new Array(this.elements[0].length).fill(0));
         }
+                    
         return toDelete.length;
     }
 
     print(){
         console.table(this.elements);       
+    }
+
+    addScore(score){
+        return score++;
     }
 }

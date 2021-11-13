@@ -1,13 +1,14 @@
 import Matrix from './matrix.js';
 
 export default class Board{
+    
     constructor(game,w, h){
         
         this.w = w;
         this.h = h;
         this.game=game;
         this.elements = new Matrix(w, h);
-    }
+    }    
 
     //verifica la collisione sia in basso che con altro elemento
     collide(element){
@@ -44,8 +45,9 @@ export default class Board{
        
     }
 
-    deleteRows(){
-        this.game.lines += this.elements.updateRows();
+
+    deleteRows(){        
+        this.game.lines += this.elements.updateRows();        
     }
     
     draw(ctx){            

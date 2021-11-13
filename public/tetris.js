@@ -10,8 +10,6 @@ const ctx = screen.getContext("2d");
 const COLOR1 = "#26224b";   //definizione colori
 const COLOR2 = "#26224b";
 
-
-
 const SCALE_F = 20; //fattore di scala costante
 let game = new TetrisGame();
 let board = new Board(game, screen.width/SCALE_F, screen.height/SCALE_F);
@@ -31,6 +29,13 @@ function resetTetramino(){
     t = game.getNextTetramino();
     t.pos.y = 0;
     board.deleteRows();
+     //METTERE QUI L'AGGIORNAMENTO DEL PUNTEGGIO
+     /*
+            game.points++;
+            console.log("STAMPA SCORE");
+            document.getElementById("score").innerHTML = game.points;                      
+      */
+              
 }
 
 window.addEventListener("keyup", (event) => {   //alla pressione del tasto
@@ -92,8 +97,8 @@ function update(time=0){        //ricorsiva, loop per aggiornare la finestra
         dropTetromino();
     }   
     drawGameBackground();
-    board.draw(ctx); 
-    t.draw(ctx);
+    board.draw(ctx);        //disegna lo sfondo
+    t.draw(ctx);            //disegna il poligono
     lastTime = time;
     requestAnimationFrame(update);
 }
